@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 
 @Getter
-@ToString
+@ToString(exclude="totalSalary")
 public class StatsCollector {
 
     private int maxAge = Integer.MIN_VALUE;
@@ -19,13 +19,16 @@ public class StatsCollector {
     private double lowestSalary = Double.MAX_VALUE;
     private int noHighBracket;
     private int noLowBracket;
-    private int noOfUsers;
-
+    private int noOfUsers; 
+    private double avgSalary;
+    private int totalSalary;
     public StatsCollector() {
     }
 
     public void accept(Employee user) {
         ++noOfUsers;
+        totalSalary += user.getSalary();
+        avgSalary = totalSalary / noOfUsers;
         maxAge = Math.max(maxAge, user.getAge());
         hightestSalary = Math.max(hightestSalary,user.getSalary());
         lowestSalary = Math.min(lowestSalary, user.getSalary());
@@ -39,6 +42,8 @@ public class StatsCollector {
     
     public void combine(StatsCollector other){
         noOfUsers += other.noOfUsers;
+        totalSalary += other.totalSalary;
+        avgSalary = totalSalary / noOfUsers;
         maxAge = Math.max(maxAge, other.maxAge);
         hightestSalary = Math.max(hightestSalary, other.hightestSalary);
         lowestSalary = Math.min(lowestSalary, other.lowestSalary);
@@ -46,4 +51,7 @@ public class StatsCollector {
         noLowBracket += other.noLowBracket;
     }
 
+    
+    
+    
 }
