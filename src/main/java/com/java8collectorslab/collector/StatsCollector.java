@@ -9,9 +9,8 @@ import lombok.ToString;
  *
  * @author MITRA
  */
-
 @Getter
-@ToString
+@ToString(exclude = "totalSalary")
 public class StatsCollector {
 
     private int maxAge = Integer.MIN_VALUE;
@@ -20,29 +19,35 @@ public class StatsCollector {
     private int noHighBracket;
     private int noLowBracket;
     private int noOfUsers;
+    private double avgSalary;
+    private int totalSalary;
 
     public StatsCollector() {
     }
 
     public void accept(Employee user) {
         ++noOfUsers;
+        totalSalary += user.getSalary();
+        avgSalary = totalSalary / noOfUsers;
         maxAge = Math.max(maxAge, user.getAge());
-        hightestSalary = Math.max(hightestSalary,user.getSalary());
+        hightestSalary = Math.max(hightestSalary, user.getSalary());
         lowestSalary = Math.min(lowestSalary, user.getSalary());
-        if(SalaryQualifier.isHighSalaryBracket().test(user)){
+        if (SalaryQualifier.isHighSalaryBracket().test(user)) {
             noHighBracket++;
         }
-        if(SalaryQualifier.isLowSalaryBracket().test(user)){
+        if (SalaryQualifier.isLowSalaryBracket().test(user)) {
             noLowBracket++;
         }
     }
-    
-    public void combine(StatsCollector other){
+
+    public void combine(StatsCollector other) {
         noOfUsers += other.noOfUsers;
+        totalSalary += other.totalSalary;
+        avgSalary = totalSalary / noOfUsers;
         maxAge = Math.max(maxAge, other.maxAge);
         hightestSalary = Math.max(hightestSalary, other.hightestSalary);
         lowestSalary = Math.min(lowestSalary, other.lowestSalary);
-        noHighBracket+= other.noHighBracket;
+        noHighBracket += other.noHighBracket;
         noLowBracket += other.noLowBracket;
     }
 
